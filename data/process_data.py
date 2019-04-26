@@ -33,7 +33,9 @@ def clean_data(df):
     df = pd.concat([df, categories], axis=1)    
 
     # Remove duplicates
-    
+    df = df.drop_duplicates()
+
+    return df
 
 def save_data(df, database_filename):
     """Save cleaned data into SQLite database"""
