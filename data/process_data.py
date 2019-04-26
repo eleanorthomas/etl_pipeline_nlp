@@ -12,11 +12,21 @@ def load_data(messages_filepath, categories_filepath):
 
 def clean_data(df):
     """Convert category data into numerical flags and remove duplicates"""
+    
+    # Set category columns
     categories = df['categories'].str.split(';', expand=True)
     row = categories.iloc[0]
     category_colnames = row.apply(lambda x: x[:-2])
     categories.columns = category_colnames
 
+    # Clean category values
+    for column in categories:
+        # set each value to be the last character of the string
+        categories[column] = categories[column].astype(str)
+        categories[column] = categories[column].str[-1]
+    
+        # convert column from string to numeric
+        categories[column] = categories[column].astype(int)
 
 def save_data(df, database_filename):
     """Save cleaned data into SQLite database"""
