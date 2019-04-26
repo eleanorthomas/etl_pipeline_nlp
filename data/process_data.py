@@ -28,6 +28,13 @@ def clean_data(df):
         # convert column from string to numeric
         categories[column] = categories[column].astype(int)
 
+    # Replace categories in original dataframe
+    df.drop('categories', axis=1, inplace=True)
+    df = pd.concat([df, categories], axis=1)    
+
+    # Remove duplicates
+    
+
 def save_data(df, database_filename):
     """Save cleaned data into SQLite database"""
     pass  
