@@ -3,6 +3,7 @@ import pandas as pd
 
 
 def load_data(messages_filepath, categories_filepath):
+    """Load message data and category data and return merged dataframe"""
     messages = pd.read_csv(messages_filepath)
     categories = pd.read_csv(categories_filepath)
     df = messages.merge(categories, on='id')
@@ -10,10 +11,12 @@ def load_data(messages_filepath, categories_filepath):
     return df
 
 def clean_data(df):
+    """Convert category data into numerical flags and remove duplicates"""
     pass
 
 
 def save_data(df, database_filename):
+    """Save cleaned data into SQLite database"""
     pass  
 
 
