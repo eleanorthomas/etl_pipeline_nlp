@@ -7,6 +7,14 @@ nltk.download(['punkt', 'wordnet'])
 nltk.download('stopwords')
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
+from nltk.corpus import stopwords
+
+from sklearn.pipeline import Pipeline
+from sklearn.metrics import classification_report, accuracy_score
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.multioutput import MultiOutputClassifier
+from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 
 def load_data(database_filepath):
     """Load message data from SQLite database"""
@@ -29,10 +37,22 @@ def tokenize(text):
 
     return clean_tokens
 
-
 def build_model():
-    pass
+    """Builds machine learning pipeline"""
 
+    pipeline = Pipeline([
+        ('vect', CountVectorizer(tokenizer=tokenize)),
+        ('tfidf', TfidfTransformer()),
+        ('clf', MultiOutputClassifier(RandomForestClassifier()))
+    ])
+
+    parameters = {
+        'vect__ngram_range': ((1, 1), (1, 2), (1, 3)),
+        'clf__estimator__min_samples_leaf': [1, 2, 3],
+    }
+
+    cv = GridSearchCV(pipeline, param_grid=parameters)
+    return cv
 
 def evaluate_model(model, X_test, Y_test, category_names):
     pass
