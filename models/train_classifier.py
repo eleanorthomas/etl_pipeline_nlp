@@ -1,9 +1,15 @@
 import sys
-
+import pandas as pd
+from sqlalchemy import create_engine
 
 def load_data(database_filepath):
-    pass
+    """Load message data from SQLite database"""
+    engine = create_engine('sqlite:///{}'.format(database_filepath))
+    df = pd.read_sql_table(database_filepath.replace('.db',''), engine)
+    X = df[['message']]
+    Y = df.drop(['id', 'message', 'original', 'genre'], axis=1)
 
+    return X, Y, Y.columns.values
 
 def tokenize(text):
     pass
