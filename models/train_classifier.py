@@ -1,4 +1,5 @@
 import sys
+import pickle
 import pandas as pd
 from sqlalchemy import create_engine
 
@@ -10,7 +11,7 @@ from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
 
 from sklearn.pipeline import Pipeline
-from sklearn.metrics import classification_report, accuracy_score
+from sklearn.metrics import classification_report
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.multioutput import MultiOutputClassifier
@@ -19,7 +20,7 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 def load_data(database_filepath):
     """Load message data from SQLite database"""
     engine = create_engine('sqlite:///{}'.format(database_filepath))
-    df = pd.read_sql_table(database_filepath.replace('.db',''), engine)
+    df = pd.read_sql_table(database_filepath.split('/')[-1].replace('.db',''), engine)
     X = df['message'].values
     Y = df.drop(['id', 'message', 'original', 'genre'], axis=1)
     category_names = Y.columns
@@ -39,8 +40,7 @@ def tokenize(text):
     return clean_tokens
 
 def build_model():
-    """Builds machine learning pipeline"""
-
+    """Build machine learning pipeline"""
     pipeline = Pipeline([
         ('vect', CountVectorizer(tokenizer=tokenize)),
         ('tfidf', TfidfTransformer()),
@@ -56,12 +56,14 @@ def build_model():
     return cv
 
 def evaluate_model(model, X_test, Y_test, category_names):
-    pass
+    """Evalute success of model on test data"""
+    for col in category_names:
+        
 
 
 def save_model(model, model_filepath):
-    pass
-
+    """Save model to a python pickle file"""
+    pickle.dump(model, open(model_filepath, 'wb'))
 
 def main():
     if len(sys.argv) == 3:
