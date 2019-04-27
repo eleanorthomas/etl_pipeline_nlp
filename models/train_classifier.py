@@ -48,8 +48,8 @@ def build_model():
     ])
 
     parameters = {
-        'vect__ngram_range': ((1, 1), (1, 2), (1, 3)),
-        'clf__estimator__min_samples_leaf': [1, 2, 3],
+        'vect__ngram_range': ((1, 1), (1, 2)),
+        'clf__estimator__min_samples_leaf': [1, 2],
     }
 
     cv = GridSearchCV(pipeline, param_grid=parameters)
