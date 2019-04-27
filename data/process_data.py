@@ -40,7 +40,7 @@ def clean_data(df):
 def save_data(df, database_filename):
     """Save cleaned data into SQLite database"""
     engine = create_engine('sqlite:///{}'.format(database_filename))
-    df.to_sql(database_filename[:-3], engine, index=False)
+    df.to_sql(database_filename.split('/')[-1].replace('.db',''), engine, index=False)
 
 def main():
     if len(sys.argv) == 4:
