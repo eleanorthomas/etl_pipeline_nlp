@@ -56,10 +56,11 @@ def build_model():
     return cv
 
 def evaluate_model(model, X_test, Y_test, category_names):
-    """Evalute success of model on test data"""
-    for col in category_names:
-        
-
+    """Evalute success of model on test data"""        
+    y_preds = model.predict(X_test)
+    for i in range(len(category_names)):
+        print("Category: {}".format(category_names[i]))
+        print(classification_report(Y_test.values[:, i], y_preds[:, i]))
 
 def save_model(model, model_filepath):
     """Save model to a python pickle file"""
