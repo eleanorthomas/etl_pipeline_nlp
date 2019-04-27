@@ -4,6 +4,7 @@ import pandas as pd
 
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
 
 from flask import Flask
 from flask import render_template, request, jsonify
@@ -47,6 +48,10 @@ def index():
     category_counts = df.drop(['id', 'message', 'original', 'genre'], axis=1).sum()
     category_names = list(category_counts.index)
     
+    all_words = pd.Series(' '.join(df['message']).lower().split())
+    word_counts = all_words[~all_words.isin(stopwords.words("english"))].value_counts()[:25]
+    words = list(word_counts.index)
+
     # create visuals
     # TODO: Below is an example - modify to create your own visuals
     graphs = [
@@ -85,6 +90,26 @@ def index():
                 },
                 'xaxis': {
                     'title': "Category"
+                }
+            }
+        },
+
+        
+        {
+            'data': [
+                Bar(
+                    x=words,
+                    y=word_counts
+                )
+            ],
+
+            'layout': {
+                'title': 'Distribution of Message Words',
+                'yaxis': {
+                    'title': "Count"
+                },
+                'xaxis': {
+                    'title': "Word"
                 }
             }
         }
