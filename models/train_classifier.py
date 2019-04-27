@@ -2,6 +2,12 @@ import sys
 import pandas as pd
 from sqlalchemy import create_engine
 
+import nltk
+nltk.download(['punkt', 'wordnet'])
+nltk.download('stopwords')
+from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer
+
 def load_data(database_filepath):
     """Load message data from SQLite database"""
     engine = create_engine('sqlite:///{}'.format(database_filepath))
@@ -12,7 +18,16 @@ def load_data(database_filepath):
     return X, Y, Y.columns.values
 
 def tokenize(text):
-    pass
+    """Tokenize input message text"
+    tokens = word_tokenize(text)
+    lemmatizer = WordNetLemmatizer()
+
+    clean_tokens = []
+    for tok in tokens:
+        clean_tok = lemmatizer.lemmatize(tok).lower().strip()
+        clean_tokens.append(clean_tok)
+
+    return clean_tokens
 
 
 def build_model():
