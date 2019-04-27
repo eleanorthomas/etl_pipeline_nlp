@@ -28,7 +28,7 @@ def load_data(database_filepath):
     return X, Y, category_names
 
 def tokenize(text):
-    """Tokenize input message text"
+    """Tokenize input message text"""
     tokens = word_tokenize(text)
     lemmatizer = WordNetLemmatizer()
 
