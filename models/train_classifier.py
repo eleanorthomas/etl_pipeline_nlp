@@ -20,10 +20,11 @@ def load_data(database_filepath):
     """Load message data from SQLite database"""
     engine = create_engine('sqlite:///{}'.format(database_filepath))
     df = pd.read_sql_table(database_filepath.replace('.db',''), engine)
-    X = df[['message']]
+    X = df['message'].values
     Y = df.drop(['id', 'message', 'original', 'genre'], axis=1)
+    category_names = Y.columns
 
-    return X, Y, Y.columns.values
+    return X, Y, category_names
 
 def tokenize(text):
     """Tokenize input message text"
